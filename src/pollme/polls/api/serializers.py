@@ -16,10 +16,14 @@ class QuestionListSerializer(ModelSerializer):
     Reference this stack overflow for the choices:
         https://stackoverflow.com/questions/33945148/return-nested-serializer-in-serializer-method-field
     """
-    pass
-
+    class Meta:
+        model = Question
+        fields = ('id', 'text', 'pub_date')
+    
 class ChoiceSerializer(ModelSerializer):
     """
     This serializes the Choice model
     """
-    pass
+    class Meta:
+        model = Choice
+        fields = ('question', 'choice_text', 'votes')
