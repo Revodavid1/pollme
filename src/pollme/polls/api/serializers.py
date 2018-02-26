@@ -16,9 +16,20 @@ class QuestionListSerializer(ModelSerializer):
     Reference this stack overflow for the choices:
         https://stackoverflow.com/questions/33945148/return-nested-serializer-in-serializer-method-field
     """
+    #choice = serializers.SerializerMethodField(source='get_question_choices')
+
+    #def get_question_choices(self, obj):
+     #   choices = obj.choice_set.all()
+      #  return ChoiceSerializer(choices, many=True).data
+    choices = SerializerMethodField(source='get_choices', read_only=True)
+
+    def get_choices(self, obj):
+        question_choices = obj.choice_set.all()
+        return ChoiceSerializer(question_choices, many=True).data
+
     class Meta:
         model = Question
-        fields = ('id', 'text', 'pub_date')
+        fields = ('id', 'text', 'pub_date', 'choices')
     
 class ChoiceSerializer(ModelSerializer):
     """
@@ -26,4 +37,4 @@ class ChoiceSerializer(ModelSerializer):
     """
     class Meta:
         model = Choice
-        fields = ('question', 'choice_text', 'votes')
+        fields = ('choice_text', 'votes')
